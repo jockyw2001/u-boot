@@ -1,0 +1,127 @@
+config MS_ISP_FLASH
+    bool "MSTAR ISP NOR FLASH"
+
+config MS_SAVE_ENV_IN_ISP_FLASH
+    bool "Save environment to ISP NOR FLASH"
+    depends on MS_ISP_FLASH
+
+config MS_MTD_ISP_FLASH
+    bool "MTD device for ISP NOR FLASH"
+    depends on MS_ISP_FLASH
+
+config MS_PARTITION
+    bool 'Enable Mstar partition support'
+    depends on MS_ISP_FLASH
+
+config MS_SDMMC
+    bool 'MSTAR SDMMC'
+
+config MS_EMMC
+    bool 'MSTAR eMMC'
+
+config MS_GPIO
+    bool 'MSTAR Gpio'
+    default y
+
+config MS_NAND
+    bool 'MSTAR NAND'
+
+config MS_SAVE_ENV_IN_NAND_FLASH
+    bool "Save environment to NAND FLASH"
+    depends on MS_NAND
+
+config MS_USB
+    bool 'MSTAR USB'
+config ENABLE_FIRST_EHC
+    bool 'Enable 1st EHC'
+    depends on MS_USB
+    default y
+
+config ENABLE_SECOND_EHC
+    bool 'Enable 2nd EHC'
+    depends on MS_USB
+    default y
+
+config ENABLE_THIRD_EHC
+    bool 'Enable 3rd EHC'
+    depends on MS_USB
+    default y
+
+config ENABLE_FOURTH_EHC
+    bool 'Enable 4th EHC'
+    depends on MS_USB
+    default y
+
+config MS_ENABLE_USB_LAN_MODULE
+    bool 'Enable USB lan module'
+    depends on MS_USB
+	default n
+
+config MS_EMAC
+    select CMD_NET
+    bool 'MSTAR EMAC'
+
+config ETHERNET_ALBANY
+    bool "Supply to internel PHY"
+    depends on MS_EMAC
+
+config MS_NOE
+    select CMD_NET
+    bool 'MSTAR NOE'
+
+config MS_DISP
+	bool 'MSTAR DISP'
+
+if (MS_NOE)
+choice
+    prompt "Ethernet Port Selection"
+    default USE_NOE_GE1
+    config USE_NOE_GE1
+        bool "Use GMAC_1"
+    config USE_NOE_GE2
+        bool "Use GMAC_2"
+endchoice
+
+choice
+    prompt "GMAC1 is connected to"
+    depends on USE_NOE_GE1
+    default NOE_GMAC1_TO_CHIPTOP
+config  NOE_GMAC1_TO_CHIPTOP
+    bool "CHIPTOP PAD for External GPHY"
+endchoice
+
+choice
+    prompt "GMAC2 is connected to"
+    depends on USE_NOE_GE2
+    default NOE_GMAC2_TO_CHIPTOP
+config  NOE_GMAC2_TO_CHIPTOP
+    bool "CHIPTOP PAD for External GPHY"
+endchoice
+
+config NOE_GMAC_PHY_ADDR
+    hex "NOE GMAC PHY address"
+    default 0x1 if USE_NOE_GE1
+    default 0x2 if USE_NOE_GE2
+    default 0x1
+    depends on MS_NOE
+    help
+        PHY address
+endif
+
+config MS_AESDMA
+    bool 'Enable AESDMA'
+
+config MS_SPINAND
+    bool "MSTAR SPINAND"
+
+config MS_SAVE_ENV_IN_NAND_FLASH
+    bool "Save environment to NAND FLASH"
+    depends on MS_SPINAND
+
+config MS_I2C
+		bool "Enable I2C and EEPROM"
+		default n
+
+config MS_PWM
+		bool "Enable PWM"
+		default n
